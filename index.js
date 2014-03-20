@@ -80,6 +80,9 @@ Connection.prototype.retry = function retry() {
      */
     this.emit('reconnect', error);
     return setTimeout(function () {
+        if (this.result.length > 0 && typeof this.result[1].close === 'function') {
+            this.result[1].close();
+        }
         this.connect.apply(
             this.connect,
             this.arguments.concat([this.retry.bind(this)])
